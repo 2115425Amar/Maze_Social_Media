@@ -1,34 +1,62 @@
 class PostsController < ApplicationController
+  before_action :set_post, only: [:edit, :update, :destroy]
 
-  # similar to get request
+  def edit
+    # @post is already set by before_action
+  end
+
+  def update
+    if @post.update(post_params)
+      render json: @post, status: :ok
+    else
+      render json: { error: "Post could not be updated", messages: @post.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def index
     posts = Post.includes(:user, :comments, :likes).order(created_at: :desc)
     render json: posts, include: [:user, :comments, :likes]
   end
-  
-  # post request
+
   def create
-    # Rails.logger.debug "Received params: #{params.inspect}"  # Prints all received parameters
     post = Post.new(post_params)
-    post.user_id = current_user&.id  # Ensure user_id is set from the session
-    
+    post.user_id = current_user&.id
     if post.save
-    # Rails.logger.debug "Post successfully created: #{post.inspect}"  # Logs successful creation
       render json: post, status: :created
     else
-    # Rails.logger.debug "Post creation failed: #{post.errors.full_messages.inspect}"  # Logs errors
-      render json: { error: "Post could not be created",
-                     messages: post.errors.full_messages },
-                     status: :unprocessable_entity
+      render json: { error: "Post could not be created", messages: post.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
+  # def destroy
+  #   if @post.destroy
+  #     render json: { message: "Post deleted successfully" }, status: :ok
+  #   else
+  #     render json: { error: "Post could not be deleted" }, status: :unprocessable_entity
+  #   end
+  # end
+
+  def destroy
+    @post = Post.find(params[:id])
+    @post.destroy
+  
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: "Post was successfully deleted." }
+      format.json { render json: { message: "Post deleted successfully" }, status: :ok }
+    end
+  end
+  
   private
 
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
   def post_params
-    params.require(:post).permit(:content, :user_id)
+    params.require(:post).permit(:title, :content, :public)
   end
 end
+
 
 
 # const { Post, User, Comment, Like } = require('./models'); // Sequelize models

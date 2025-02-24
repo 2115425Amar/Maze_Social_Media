@@ -8,6 +8,8 @@
 Rails.application.routes.draw do
    # Define the root path to point to home#index
   root 'home#index'
+
+ 
   # User routes
   post "/signup", to: "users#create"
 
@@ -19,17 +21,20 @@ Rails.application.routes.draw do
   # Post routes
   get "/posts", to: "posts#index"
   post "/posts", to: "posts#create"
+  get "posts/:id/edit", to: "posts#edit"
+  patch "/posts/:id", to: "posts#update", as: "post"  # Added update route
+  delete "/posts/:id", to: "posts#destroy"  # Added delete route
+
 
   # Comment routes
   post "/posts/:post_id/comments", to: "comments#create", as: "post_comments"
-
-  # POST /posts/:post_id/comments
 
   # Like routes
   post "/posts/:post_id/likes", to: "likes#create", as: "post_likes"
 
   #dislike post
   delete "/posts/:post_id/likes/:user_id", to: "likes#destroy", as: "post_dislike"
+
 end
 
 
