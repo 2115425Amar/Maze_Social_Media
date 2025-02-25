@@ -11,6 +11,12 @@ Rails.application.routes.draw do
 
   get "/posts", to: "home#index"
 
+  #signup
+  get "/register", to: "users#signup"
+
+  #login
+  get "/login", to: "users#login"
+
 
  
   # User routes

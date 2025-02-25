@@ -11,12 +11,21 @@ class UsersController < ApplicationController
         render json: { error: user.errors.full_messages }, status: :unprocessable_entity   #http 422 error
       end
     end
+    def signup
+      render "users/registration/signup"
+    end
+
+    def login
+      render "users/registration/login"
+    end
   
     private
   
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
+
+    
 
   end
   

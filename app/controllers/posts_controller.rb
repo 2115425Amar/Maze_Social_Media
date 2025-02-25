@@ -22,7 +22,9 @@ class PostsController < ApplicationController
     post = Post.new(post_params)
     post.user_id = current_user&.id
     if post.save
-      render json: post, status: :created
+      redirect_to posts_path notice: "Post is created."
+
+      # render json: post, status: :created
     else
       render json: { error: "Post could not be created", messages: post.errors.full_messages }, status: :unprocessable_entity
     end
@@ -41,7 +43,7 @@ class PostsController < ApplicationController
     @post.destroy
   
     respond_to do |format|
-      format.html { redirect_to root_path, notice: "Post was successfully deleted." }
+      format.html { redirect_to posts_path, notice: "Post was successfully deleted." }
       format.json { render json: { message: "Post deleted successfully" }, status: :ok }
     end
   end
