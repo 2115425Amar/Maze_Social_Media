@@ -3,6 +3,10 @@ class HomeController < ApplicationController
     @title_text = "Maze"
     @posts = Post.includes(:user, :comments, :likes).order(created_at: :desc)
   end
+
+  def main
+    render layout: false
+  end
 end
 
 

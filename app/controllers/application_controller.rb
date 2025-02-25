@@ -8,11 +8,9 @@ class ApplicationController < ActionController::Base
 
   # protect_from_forgery with: :exception
 
-
   helper_method :current_user
   # Normally, controller methods aren't accessible in views, but helper_method allows views to use current_user.
   # In an API-only app, this isn't needed unless you're rendering templates.
-
 
   def current_user
     # Example: Fetch user from session if user is logged in

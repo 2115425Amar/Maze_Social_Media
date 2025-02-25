@@ -7,7 +7,10 @@
 
 Rails.application.routes.draw do
    # Define the root path to point to home#index
-  root 'home#index'
+  root 'home#main'
+
+  get "/posts", to: "home#index"
+
 
  
   # User routes
