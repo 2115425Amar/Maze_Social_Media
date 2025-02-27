@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
     comment = post.comments.new(comment_params)
 
     if comment.save
-      redirect_to root_path, notice: "Comment added!"
+      redirect_to post_path(post), notice: "Comment added!"
     else
       flash[:alert] = "Comment could not be created"
       redirect_to root_path

@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:edit, :update, :destroy]
+  before_action :ensure_user_owns_post, only: [:edit, :update, :destroy]
 
   def edit
     # @post is already set by before_action
@@ -7,44 +8,40 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      render json: @post, status: :ok
+      redirect_to posts_path, notice: "Post was successfully updated."
     else
-      render json: { error: "Post could not be updated", messages: @post.errors.full_messages }, status: :unprocessable_entity
+      # Return validation errors
+      flash.now[:alert] = @post.errors.full_messages.join(", ")
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def index
-    posts = Post.includes(:user, :comments, :likes).order(created_at: :desc)
-    render json: posts, include: [:user, :comments, :likes]
-  end
-
-  def create
-    post = Post.new(post_params)
-    post.user_id = current_user&.id
-    if post.save
-      redirect_to posts_path notice: "Post is created."
-
-      # render json: post, status: :created
-    else
-      render json: { error: "Post could not be created", messages: post.errors.full_messages }, status: :unprocessable_entity
+    @posts = Post.includes(:user, :comments, :likes)
+                 .public_posts
+                 .recent
+    respond_to do |format|
+      format.html
+      format.json { render json: @posts, include: [:user, :comments, :likes] }
     end
   end
 
-  # def destroy
-  #   if @post.destroy
-  #     render json: { message: "Post deleted successfully" }, status: :ok
-  #   else
-  #     render json: { error: "Post could not be deleted" }, status: :unprocessable_entity
-  #   end
-  # end
+  def create
+    @post = current_user.posts.new(post_params)
+    
+    if @post.save
+      redirect_to posts_path, notice: "Post was successfully created."
+    else
+      flash.now[:alert] = @post.errors.full_messages.join(", ")
+      redirect_to posts_path, status: :unprocessable_entity
+    end
+  end
 
   def destroy
-    @post = Post.find(params[:id])
-    @post.destroy
-  
-    respond_to do |format|
-      format.html { redirect_to posts_path, notice: "Post was successfully deleted." }
-      format.json { render json: { message: "Post deleted successfully" }, status: :ok }
+    if @post.destroy
+      redirect_to posts_path, notice: "Post was successfully deleted."
+    else
+      redirect_to posts_path, alert: "Failed to delete post."
     end
   end
   
@@ -55,7 +52,13 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :content, :public)
+    params.require(:post).permit(:content, :public)
+  end
+
+  def ensure_user_owns_post
+    unless @post.user_id == current_user&.id
+      redirect_to posts_path, alert: "You are not authorized to perform this action."
+    end
   end
 end
 

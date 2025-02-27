@@ -5,22 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maze</title>
+    <!-- Import Montserrat font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Import Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="min-h-screen text-white relative overflow-hidden font-[Montserrat]">
-
+    <!-- Background with earth image -->
     <div style="background-image: url(<%= asset_path('earth.png') %>);" class="bg-cover h-screen">
-
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Maze</title>
-            <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-        </head>
+        <!-- Navigation Bar -->
         <nav class="">
-            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-3">
+            <div class="flex flex-wrap items-center justify-between mx-auto p-6">
                 <a href="http://127.0.0.1:3000/" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <div class="bg-white rounded-lg p-1">
                         <img src="<%= asset_path('icon.svg')%>" class="h-7" alt="Maze Logo" />
@@ -32,42 +28,48 @@
 
         <hr>
 
-        <!-- Main Content -->
+        <!-- Main Content - Login Card -->
         <div class="flex justify-center items-center min-h-[calc(100vh-80px)]">
-            <div class="w-[400px] bg-black/30 backdrop-blur-sm rounded-xl p-8">
+            <!-- Login form container with blur effect -->
+            <div class="backdrop-blur-md h-[550px] bg-white/15 w-[400px] rounded-xl p-8">
                 <h2 class="text-2xl font-semibold mb-6">Login</h2>
                 
+                <!-- Login Form using Rails form helper -->
                 <%= form_for :session, url: login_path, html: { class: "space-y-4" } do |f| %>
+                    <!-- Email field -->
                     <div>
                         <label class="block text-sm mb-1">Email</label>
                         <%= f.email_field :email, 
-                            class: "w-full px-3 py-2 bg-white/20 border border-white/30 rounded-md text-white focus:outline-none focus:border-blue-500",
+                            class: "w-full px-3 py-2 rounded-md text-white focus:outline-none focus:border-blue-500",
                             placeholder: "Enter your email" %>
                     </div>
 
+                    <!-- Password field -->
                     <div>
                         <label class="block text-sm mb-1">Password</label>
                         <%= f.password_field :password, 
-                            class: "w-full px-3 py-2 bg-white/20 border border-white/30 rounded-md text-white focus:outline-none focus:border-blue-500",
+                            class: "w-full px-3 py-2 rounded-md text-white focus:outline-none focus:border-blue-500",
                             placeholder: "Enter your password" %>
                     </div>
 
+                    <!-- Remember me checkbox -->
                     <div class="flex items-center">
-                        <%= f.check_box :remember_me, class: "w-4 h-4 text-blue-500 rounded border-gray-300 focus:ring-blue-500" %>
+                        <%= f.check_box :remember_me, class: "w-4 h-4 focus:ring-blue-500" %>
                         <label class="ml-2 text-sm">Remember me</label>
                     </div>
 
-                    <%= f.submit "Login", class: "w-full py-2 bg-blue-500 hover:bg-blue-600 rounded-md text-white transition-colors mt-6" %>
+                    <!-- Submit button -->
+                    <%= f.submit "Login", class: "w-[50%] py-2 bg-blue-500 hover:bg-blue-600 rounded-md text-white transition-colors mt-6" %>
                 <% end %>
 
-                <p class="text-center mt-4 text-sm">
+                <!-- Sign up link -->
+                <p class="mt-4 text-sm">
                     Don't have an account? 
                     <a href="/register" class="text-blue-500 hover:text-blue-600">Sign up</a>
                 </p>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>

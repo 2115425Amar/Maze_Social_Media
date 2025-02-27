@@ -5,7 +5,8 @@ class LikesController < ApplicationController
       like = post.likes.new(user_id: params[:user_id])    # Associate the like with the user
   
       if like.save
-        render json: like, status: :created
+        redirect_to posts_path notice: "Like is created."
+        # render json: like, status: :created
       else
         render json: { error: "Like could not be created" }, status: :unprocessable_entity
       end
@@ -18,7 +19,8 @@ class LikesController < ApplicationController
   
       if like
         like.destroy  # Remove the like
-        render json: { message: "Disliked the post" }, status: :ok
+        redirect_to posts_path notice: "Like is removed."
+        # render json: { message: "Disliked the post" }, status: :ok
       else
         render json: { error: "Like not found" }, status: :not_found
       end
