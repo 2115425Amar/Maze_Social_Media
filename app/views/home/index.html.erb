@@ -35,7 +35,6 @@
         <div class="bg-white rounded-lg mt-8 mx-[2%] my-5 ">
             <div class="p-5 mx-6 ">
                 <%= form.text_field :content, placeholder: "What's happening...?", class: "w-full px-4 py-3 bg-[#F5F6F8] rounded-xl focus:outline-none" %>
-                <%= form.hidden_field :user_id, value: current_user&.id %>
             </div>
 
             <%# public/private %>
@@ -43,15 +42,14 @@
             <div class="flex flex-col justify-between p-4  border-[#3333334D] mx-6">
                 <span class="block text-base font-medium text-gray-900">Visibility</span>
                 <div class="flex gap-4 pt-1 mt-2">
-                    <label for="public" class="flex items-center gap-1 md:gap-2 cursor-pointer">
-                        <input type="radio" name="public" value=true class="" checked>
-                        <span class="text-gray-900 text-sm md:text-base">Public</span>
-                    </label>
-
-                    <label for="public" class="flex items-center gap-1 md:gap-2 cursor-pointer">
-                        <input type="radio" name="public" value=false class="">
-                        <span class="text-gray-900 text-sm md:text-base">Private</span>
-                    </label>
+                    <div class="flex items-center">
+                        <%= form.radio_button :public, "true", checked: true %>
+                        <%= form.label :public_true, "Public", class: "text-gray-900 text-sm md:text-base ml-2" %>
+                    </div>
+                    <div class="flex items-center">
+                        <%= form.radio_button :public, "false" %>
+                        <%= form.label :public_false, "Private", class: "text-gray-900 text-sm md:text-base ml-2" %>
+                    </div>
                 </div>
             </div>
 

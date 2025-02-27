@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:edit, :update, :destroy]
-  before_action :ensure_user_owns_post, only: [:edit, :update, :destroy]
+  before_action :ensure_user_owns_post, only: [:edit, :update, :destroy]  
 
   def edit
     # @post is already set by before_action
@@ -24,10 +24,14 @@ class PostsController < ApplicationController
       format.html
       format.json { render json: @posts, include: [:user, :comments, :likes] }
     end
+    # posts = Post.includes(:user, :comments, :likes).order(created_at: :desc)
+    # render json: posts, include: [:user, :comments, :likes]
   end
 
   def create
-    @post = current_user.posts.new(post_params)
+    @post = Post.new(post_params)
+    @post.user_id = current_user&.id
+    @post.public = params[:post][:public] == "true"
     
     if @post.save
       redirect_to posts_path, notice: "Post was successfully created."
@@ -52,7 +56,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:content, :public)
+    params.require(:post).permit(:content)
   end
 
   def ensure_user_owns_post

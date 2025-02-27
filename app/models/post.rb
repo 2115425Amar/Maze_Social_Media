@@ -11,15 +11,9 @@ class Post < ApplicationRecord
   scope :private_posts, -> { where(public: false) }
   scope :recent, -> { order(created_at: :desc) }
 
-  validate :appropriate_content
+  attribute :public, :boolean, default: true
 
   private
-
-  def appropriate_content
-    if content.present? && content.downcase.match?(/(spam|offensive|inappropriate)/i)
-      errors.add(:content, "contains inappropriate content")
-    end
-  end
 end
 
 # dependent: :destroy: This option ensures that when a Post is deleted, 

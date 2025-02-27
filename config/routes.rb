@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   root 'home#main'
 
   get "/posts", to: "home#index"
+  #  get "/posts", to: "posts#index"
 
   #signup
   get "/register", to: "users#signup"
@@ -28,7 +29,7 @@ Rails.application.routes.draw do
 
 
   # Post routes
-  get "/posts", to: "posts#index"
+  # get "/posts", to: "posts#index"
   post "/posts", to: "posts#create"
   get "posts/:id/edit", to: "posts#edit"
   patch "/posts/:id", to: "posts#update", as: "post"  # Added update route
